@@ -140,7 +140,6 @@ const editBookById = (request, h) => {
             message: 'Buku berhasil diperbarui'
         })
         response.code(200)
-        console.log(books)
         return response
     }
 
@@ -184,4 +183,39 @@ const deleteBookById = (request, h) => {
     return response
 }
 
-module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById }
+// bagian optional
+const getAllBooksByQuery = (request, h) => {
+    // bagian query
+    const { name, reading, finised } = request.query
+    console.log(name)
+    if (name) {
+        const filteredBooks = books.filter(book =>
+            book.name.toLowerCase().includes(name.toLowerCase())
+        )
+
+        return {
+            status: 'success',
+            data: { books: filteredBooks }
+        }
+    } else if (reading === 1) {
+        const filteredBooks = books.filter(book =>
+            book.reading
+        )
+
+        return {
+            status: 'success',
+            data: { books: filteredBooks }
+        }
+    } else if (finised === 1) {
+        const filteredBooks = books.filter(book =>
+            book.reading
+        )
+
+        return {
+            status: 'success',
+            data: { books: filteredBooks }
+        }
+    }
+}
+
+module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById, getAllBooksByQuery }
