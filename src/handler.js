@@ -81,7 +81,7 @@ const getAllBooks = (request, h) => {
 const getDetailBooks = (request, h) => {
     const { bookId } = request.params
     const book = books.filter(index => index.id === bookId)[0]
-    console.log(book)
+
     if (book !== undefined) {
         return {
             status: 'success',
@@ -103,8 +103,7 @@ const editBookById = (request, h) => {
     const { bookId } = request.params
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
 
-    const index = books.filter((book) => book.bookId === bookId)
-
+    const book = books.findIndex(index => index.id === bookId)
     if (!name) {
         const response = h.response({
             status: 'fail',
@@ -120,9 +119,9 @@ const editBookById = (request, h) => {
         })
         response.code(400)
         return response
-    } else if (index !== -1) {
-        books[index] = {
-            ...books[index],
+    } else if (book !== -1) {
+        books[book] = {
+            ...books[book],
             name,
             year,
             author,
@@ -138,6 +137,7 @@ const editBookById = (request, h) => {
             message: 'Buku berhasil diperbarui'
         })
         response.code(200)
+        console.log(books)
         return response
     }
 
