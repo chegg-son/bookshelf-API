@@ -10,6 +10,7 @@ const percobaanGet = () => ({
     message: 'percobaan awal cek API di GET /'
 })
 
+// method POST
 const addBooksHandler = (request, h) => {
     const idBooks = nanoid(16)
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
@@ -78,6 +79,7 @@ const getAllBooks = (request, h) => {
     })
 }
 
+// method GET
 const getDetailBooks = (request, h) => {
     const { bookId } = request.params
     const book = books.filter(index => index.id === bookId)[0]
@@ -99,6 +101,7 @@ const getDetailBooks = (request, h) => {
     return response
 }
 
+// method PUT
 const editBookById = (request, h) => {
     const { bookId } = request.params
     const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload
@@ -149,4 +152,36 @@ const editBookById = (request, h) => {
     return response
 }
 
-module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById }
+// bagian method DELETE
+const deleteBookById = (request, h) => {
+    const { bookId } = request.params
+    const book = books.findIndex(n => n.id === bookId)
+    const isFinished = books.filter(book => book.isFinished)
+
+    if (isFinished === true) {
+        books.splice(book, 1)
+        const response = h.response({
+            status: 'success',
+            message: 'Buku berhasil dihapus'
+        })
+        response.code(200)
+        return response
+    } else if (book !== -1) {
+        books.splice(book, 1)
+        const response = h.response({
+            status: 'success',
+            message: 'Buku berhasil dihapus'
+        })
+        response.code(200)
+        return response
+    }
+
+    const response = h.response({
+        status: 'fail',
+        message: 'Buku gagal dihapus. Id tidak ditemukan'
+    })
+    response.code(404)
+    return response
+}
+
+module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById }
