@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-const { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById, getAllBooksByQuery } = require('./handler')
+const { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById} = require('./handler')
 
 const routes = [
     {
@@ -32,11 +32,6 @@ const routes = [
         method: 'DELETE',
         path: '/books/{bookId}',
         handler: deleteBookById
-    },
-    {
-        method: 'GET',
-        path: '/books/',
-        handler: getAllBooksByQuery
     }
 ]
 

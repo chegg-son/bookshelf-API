@@ -65,16 +65,51 @@ const addBooksHandler = (request, h) => {
 }
 
 const getAllBooks = (request, h) => {
-    const filteredBooks = books.map(book => ({
+    const detailBooks = books.map(book => ({
         id: book.id,
         name: book.name,
         publisher: book.publisher
     }))
+    // bagian opsional
+    const { name, reading, finished } = request.params
+
+    if (name) {
+        const filteredName = books.filter(book =>
+            book.name.toLowerCase().includes(name.toLowerCase())
+        )
+
+        return {
+            status: 'success',
+            data: { books: filteredName }
+        }
+    }
+
+    if (reading === 1) {
+        const book = books.filter(n => n.reading === true)
+
+        return {
+            status: 'success',
+            data: {
+                books: book
+            }
+        }
+    }
+
+    if (reading === 0) {
+        const book = books.filter(n => n.reading === false)
+
+        return {
+            status: 'success',
+            data: {
+                books: book
+            }
+        }
+    }
 
     return ({
         status: 'success',
         data: {
-            books: filteredBooks
+            books: detailBooks
         }
     })
 }
@@ -183,39 +218,38 @@ const deleteBookById = (request, h) => {
     return response
 }
 
-// bagian optional
-const getAllBooksByQuery = (request, h) => {
-    // bagian query
-    const { name, reading, finised } = request.query
-    console.log(name)
-    if (name) {
-        const filteredBooks = books.filter(book =>
-            book.name.toLowerCase().includes(name.toLowerCase())
-        )
+// const getByQuery = (request, h) => {
+//     // bagian query
+//     const { name, reading, finished } = request.query
 
-        return {
-            status: 'success',
-            data: { books: filteredBooks }
-        }
-    } else if (reading === 1) {
-        const filteredBooks = books.filter(book =>
-            book.reading
-        )
+//     if (name) {
+//         const filteredBooks = books.filter(book =>
+//             book.name.toLowerCase().includes(name.toLowerCase())
+//         )
 
-        return {
-            status: 'success',
-            data: { books: filteredBooks }
-        }
-    } else if (finised === 1) {
-        const filteredBooks = books.filter(book =>
-            book.reading
-        )
+//         return {
+//             status: 'success',
+//             data: { books: filteredBooks }
+//         }
+//     } else if (reading === 1) {
+//         const filteredBooks = books.filter(book =>
+//             book.reading === true
+//         )
 
-        return {
-            status: 'success',
-            data: { books: filteredBooks }
-        }
-    }
-}
+//         return {
+//             status: 'success',
+//             data: { books: filteredBooks }
+//         }
+//     } else if (reading === 0) {
+//         const filteredBooks = books.filter(book =>
+//             book.reading === false
+//         )
 
-module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById, getAllBooksByQuery }
+//         return {
+//             status: 'success',
+//             data: { books: filteredBooks }
+//         }
+//     }
+// }
+
+module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById }
