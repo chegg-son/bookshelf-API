@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 
-const { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById} = require('./handler')
+const { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById } = require('./handler')
 
 const routes = [
     {

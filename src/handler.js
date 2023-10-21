@@ -82,9 +82,7 @@ const getAllBooks = (request, h) => {
             status: 'success',
             data: { books: filteredName }
         }
-    }
-
-    if (reading === 1) {
+    } else if (reading === 1) {
         const book = books.filter(n => n.reading === true)
 
         return {
@@ -93,9 +91,7 @@ const getAllBooks = (request, h) => {
                 books: book
             }
         }
-    }
-
-    if (reading === 0) {
+    } else if (reading === 0) {
         const book = books.filter(n => n.reading === false)
 
         return {
@@ -104,14 +100,33 @@ const getAllBooks = (request, h) => {
                 books: book
             }
         }
-    }
+    } else if (finished === 1) {
+        const book = books.filter(n => n.readPage === n.pageCount)
 
-    return ({
-        status: 'success',
-        data: {
-            books: detailBooks
+        return {
+            status: 'success',
+            data: {
+                books: book
+            }
         }
-    })
+    } else if (finished === 0) {
+        const book = books.filter(n => n.readPage < n.pageCount)
+
+        return {
+            status: 'success',
+            data: {
+                books: book
+            }
+        }
+    } else {
+        // bagian mandatory getallbooks
+        return ({
+            status: 'success',
+            data: {
+                books: detailBooks
+            }
+        })
+    }
 }
 
 // method GET
