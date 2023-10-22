@@ -23,12 +23,9 @@ const addBooksHandler = (request, h) => {
         id: idBooks, name, year, author, summary, publisher, pageCount, readPage, finished: isFinished, reading, insertedAt, updatedAt
     }
 
-    books.push(newBooks)
-
-    const isSuccess = books.filter((book) => book.id === idBooks).length > 0
-
     // apabila Client tidak melampirkan properti namepada request body
     if (!name) {
+        books.slice(newBooks, 1)
         const response = h.response({
             status: 'fail',
             message: 'Gagal menambahkan buku. Mohon isi nama buku'
@@ -36,14 +33,22 @@ const addBooksHandler = (request, h) => {
         response.code(400)
         return response
         // apabila nilai properti readPage yang lebih besar dari nilai properti pageCount
-    } else if (readPage > pageCount) {
+    }
+    if (readPage > pageCount) {
+        books.slice(newBooks, 1)
         const response = h.response({
             status: 'fail',
             message: 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
         })
         response.code(400)
         return response
-    } else if (isSuccess) {
+    }
+
+    books.push(newBooks)
+
+    const isSuccess = books.filter((book) => book.id === idBooks).length > 0
+
+    if (isSuccess) {
         const response = h.response({
             status: 'success',
             message: 'Buku berhasil ditambahkan',
@@ -65,67 +70,41 @@ const addBooksHandler = (request, h) => {
 }
 
 const getAllBooks = (request, h) => {
-    const detailBooks = books.map(book => ({
-        id: book.id,
-        name: book.name,
-        publisher: book.publisher
-    }))
-    // bagian opsional
-    const { name, reading, finished } = request.params
+    const { name, reading, finished } = request.query
 
     if (name) {
         const filteredName = books.filter(book =>
             book.name.toLowerCase().includes(name.toLowerCase())
         )
-
-        return {
-            status: 'success',
-            data: { books: filteredName }
-        }
-    } else if (reading === 1) {
-        const book = books.filter(n => n.reading === true)
-
         return {
             status: 'success',
             data: {
-                books: book
+                books: filteredName.map(n => ({
+                    id: n.id, name: n.name, publisher: n.publisher
+                }))
             }
         }
-    } else if (reading === 0) {
-        const book = books.filter(n => n.reading === false)
+    }
 
-        return {
-            status: 'success',
-            data: {
-                books: book
-            }
-        }
-    } else if (finished === 1) {
-        const book = books.filter(n => n.readPage === n.pageCount)
+    let filteredBooks = books
 
-        return {
-            status: 'success',
-            data: {
-                books: book
-            }
-        }
-    } else if (finished === 0) {
-        const book = books.filter(n => n.readPage < n.pageCount)
+    if (reading === '1' || reading === '0') {
+        const isReading = reading === '1'
+        filteredBooks = books.filter(book => book.reading === isReading)
+    }
 
-        return {
-            status: 'success',
-            data: {
-                books: book
-            }
+    if (finished === '1' || finished === '0') {
+        const isFinished = finished === '1'
+        filteredBooks = books.filter(book => (book.readPage === book.pageCount) === isFinished)
+    }
+
+    return {
+        status: 'success',
+        data: {
+            books: filteredBooks.map(book => ({
+                id: book.id, name: book.name, publisher: book.publisher
+            }))
         }
-    } else {
-        // bagian mandatory getallbooks
-        return ({
-            status: 'success',
-            data: {
-                books: detailBooks
-            }
-        })
     }
 }
 
