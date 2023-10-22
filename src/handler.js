@@ -212,38 +212,4 @@ const deleteBookById = (request, h) => {
     return response
 }
 
-// const getByQuery = (request, h) => {
-//     // bagian query
-//     const { name, reading, finished } = request.query
-
-//     if (name) {
-//         const filteredBooks = books.filter(book =>
-//             book.name.toLowerCase().includes(name.toLowerCase())
-//         )
-
-//         return {
-//             status: 'success',
-//             data: { books: filteredBooks }
-//         }
-//     } else if (reading === 1) {
-//         const filteredBooks = books.filter(book =>
-//             book.reading === true
-//         )
-
-//         return {
-//             status: 'success',
-//             data: { books: filteredBooks }
-//         }
-//     } else if (reading === 0) {
-//         const filteredBooks = books.filter(book =>
-//             book.reading === false
-//         )
-
-//         return {
-//             status: 'success',
-//             data: { books: filteredBooks }
-//         }
-//     }
-// }
-
 module.exports = { percobaanGet, addBooksHandler, getAllBooks, getDetailBooks, editBookById, deleteBookById }
